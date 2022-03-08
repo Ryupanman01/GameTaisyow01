@@ -10,9 +10,9 @@ public class Player01 : MonoBehaviour
     private Gamepad playerAction;
     private InputAction move;
 
-    private float move_x;
-    private Vector3 player_move;
-
+    /*移動速度の設定*/
+    [SerializeField] private float playerSpeed = 2.0f;
+    /*アニメーター*/
     [SerializeField] Animator animator;
 
     private void Awake()
@@ -29,7 +29,19 @@ public class Player01 : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //rb.AddForce(, ForceMode.Impulse);
+        var x = move.ReadValue<Vector2>().x;
+        //var y = move.ReadValue<Vector2>().y;
+        var moveVector = new Vector3(x, 0, 0);
+        if(moveVector.magnitude > 1)
+        {
+            moveVector.Normalize();
+        }
+
+        var factor = (2 * moveVector.magnitude - rb.velocity.magnitude) / Time.fixedDeltaTime;
+
+        rb.AddForce(moveVector * factor);
+
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.LookRotation(moveVector), 20.0f * Time.deltaTime);
     }
 
     private void OnEnable()
