@@ -30,18 +30,19 @@ public class Player01 : MonoBehaviour
     private void FixedUpdate()
     {
         var x = move.ReadValue<Vector2>().x;
-        //var y = move.ReadValue<Vector2>().y;
+        
         var moveVector = new Vector3(x, 0, 0);
+        var moveDirection = new Vector3(0, 0, x);
         if(moveVector.magnitude > 1)
         {
             moveVector.Normalize();
         }
 
-        var factor = (2 * moveVector.magnitude - rb.velocity.magnitude) / Time.fixedDeltaTime;
+        var factor = (4 * moveVector.magnitude - rb.velocity.magnitude) / Time.fixedDeltaTime;
 
         rb.AddForce(moveVector * factor);
 
-        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.LookRotation(moveVector), 20.0f * Time.deltaTime);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.LookRotation(moveDirection), 20.0f * Time.deltaTime);
     }
 
     private void OnEnable()
