@@ -18,6 +18,10 @@ public class PlayerMove : MonoBehaviour
     private InputAction move;
     private State state;
 
+    /*プレイヤーの方向*/
+    private Quaternion player_direction; 
+
+
     [SerializeField] Animator animator;
 
     private void Awake()
@@ -31,7 +35,7 @@ public class PlayerMove : MonoBehaviour
     {
         /*キャラクターの移動*/
         Move();
-        //Rotation();
+        Rotation();
 
         /*Animatorにキャラクターや環境のパラメーターを設定*/
         ApplyAnimatorParameter();
@@ -41,40 +45,65 @@ public class PlayerMove : MonoBehaviour
     {
         var velocity = rb.velocity;
         var input = Mathf.Abs(move.ReadValue<Vector2>().x);
+        var speed = 0f;
+        var speeds = move.ReadValue<Vector2>().x * 4.0f;
 
         /*移動速度を計算*/
         if (input <= 0f)
         {
             state = State.idle;
+            speed = 0f;
             Debug.Log("Idle");
         }
-        else if (input > 0f && input <= 0.5f)
+        else if (input > 0f && input <= 0.7f)
         {
             state = State.walk;
+            speed = move.ReadValue<Vector2>().x * 4.0f;
             Debug.Log("Walk");
         }
-        else if (input > 0.5f && input <= 1f)
+        else if (input > 0.7f && input <= 0.9f)
         {
             state = State.run;
+            speed = speeds * input * 2.7f;
             Debug.Log("Run");
+        }else if(input > 0.9f)
+        {
+            speed = speeds * input * 3.0f;
+            Debug.Log("MaxRun");
         }
-        var speed = move.ReadValue<Vector2>().x * 4.0f;
 
         velocity.x = speed;
         rb.velocity = velocity;
     }
+
+    private void Rotation()
+    {
+        if (move.ReadValue<Vector2>().x > 0)/*左スティックが右に入力されているとき*/
+        {
+            /*プレイヤーの向きを右に向いている状態にする処理*/
+            if (transform.rotation != Quaternion.Euler(0, 0, 0))
+            {
+                player_direction = Quaternion.Euler(0, 0, 0); /*Quaternion.Eulerで向きを3軸(xyz)まとめて値を指定したものをプレイヤーの向きを入れる変数に代入*/
+                transform.rotation = player_direction; /*プレイヤーの向きをlocalRotationに代入して回転させる*/
+            }
+        }
+        else if (move.ReadValue<Vector2>().x < 0)/*左スティックが左に入力されているとき*/
+        {
+            /*プレイヤーの向きを左に向いている状態にする処理*/
+            if (transform.rotation != Quaternion.Euler(0, 180, 0))
+            {
+                player_direction = Quaternion.Euler(0, 180, 0); /*Quaternion.Eulerで向きを3軸(xyz)まとめて値を指定したものをプレイヤーの向きを入れる変数に代入*/
+                transform.rotation = player_direction; /*プレイヤーの向きをlocalRotationに代入して回転させる*/
+            }
+        }
+    }
+         
 
     private void ApplyAnimatorParameter()
     {
         /*Animatorにキャラクターや環境のパラメーターを設定*/
         var speed = Mathf.Abs(move.ReadValue<Vector2>().x);
         animator.SetFloat("Speed", speed, 0.1f, Time.deltaTime);
-    }
-
-    /*加速*/
-    private void Acceleration()
-    {
-
     }
 
     private void OnEnable()
