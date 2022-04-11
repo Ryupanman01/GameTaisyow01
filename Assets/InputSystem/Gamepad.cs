@@ -1,4 +1,4 @@
-// GENERATED AUTOMATICALLY FROM 'Assets/InputSystem/Gamepad.inputactions'
+// GENERATED AUTOMATICALLY FROM 'Assets/InputSystem/gamepad.inputactions'
 
 using System;
 using System.Collections;
@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-public class @Gamepad : IInputActionCollection, IDisposable
+public class @gamepad : IInputActionCollection, IDisposable
 {
     public InputActionAsset asset { get; }
-    public @Gamepad()
+    public @gamepad()
     {
         asset = InputActionAsset.FromJson(@"{
-    ""name"": ""Gamepad"",
+    ""name"": ""gamepad"",
     ""maps"": [
         {
             ""name"": ""Player"",
@@ -217,8 +217,8 @@ public class @Gamepad : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Jump;
     public struct PlayerActions
     {
-        private @Gamepad m_Wrapper;
-        public PlayerActions(@Gamepad wrapper) { m_Wrapper = wrapper; }
+        private @gamepad m_Wrapper;
+        public PlayerActions(@gamepad wrapper) { m_Wrapper = wrapper; }
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Camera => m_Wrapper.m_Player_Camera;
         public InputAction @Attack => m_Wrapper.m_Player_Attack;

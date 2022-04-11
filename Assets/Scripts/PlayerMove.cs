@@ -14,7 +14,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     private Rigidbody rb;
-    private Gamepad inputData;
+    private gamepad inputData;
     private InputAction move;
     private State state;
 
@@ -28,7 +28,7 @@ public class PlayerMove : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>();
-        inputData = new Gamepad();
+        inputData = new gamepad();
     }
 
     private void Update()
